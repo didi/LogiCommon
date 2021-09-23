@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didiglobal.logi.job.mapper.LogIJobLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.didiglobal.logi.job.common.po.LogIJobLogPO">
+        <id column="id" property="id"/>
+        <result column="job_code" property="jobCode"/>
+        <result column="task_code" property="taskCode"/>
+        <result column="task_id" property="taskId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="task_desc" property="taskDesc"/>
+        <result column="class_name" property="className"/>
+        <result column="retry_times" property="tryTimes"/>
+        <result column="worker_code" property="workerCode"/>
+        <result column="worker_ip" property="workerIp"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="status" property="status"/>
+        <result column="error" property="error"/>
+        <result column="result" property="result"/>
+        <result column="app_name" property="appName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , job_code, task_code, task_id, task_name, task_desc, class_name, try_times, worker_code, worker_ip,
+        start_time, end_time, status, error, result, create_time, update_time, app_name
+    </sql>
+
+    <select id="pagineListByCondition" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from logi_job_log
+        WHERE
+        app_name = #{appName}
+        <if test="taskId != null">and task_id = #{taskId}</if>
+        <if test="taskDesc != null">and task_desc like concat('%,', #{taskDesc},',%')</if>
+        <if test="jobStatus != null">and status = #{jobStatus}</if>
+        <if test="beginTime != null">and create_time &gt; #{beginTime}</if>
+        <if test="endTime != null">and create_time &lt; #{endTime}</if>
+        order by id desc
+        limit #{start}, #{size}
+    </select>
+
+    <select id="pagineCountByCondition" parameterType="map" resultType="integer">
+        select
+        count(1)
+        from logi_job_log
+        WHERE
+        app_name = #{appName}
+        <if test="taskId != null">and task_id = #{taskId}</if>
+        <if test="taskDesc != null">and task_desc like concat('%,', #{taskDesc},',%')</if>
+        <if test="jobStatus != null">and status = #{jobStatus}</if>
+        <if test="beginTime != null">and create_time &gt; #{beginTime}</if>
+        <if test="endTime != null">and create_time &lt; #{endTime}</if>
+    </select>
+
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didiglobal.logi.job.mapper.LogIJobMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.didiglobal.logi.job.common.po.LogIJobPO">
+        <id column="id" property="id"/>
+        <result column="job_code" property="jobCode"/>
+        <result column="task_code" property="taskCode"/>
+        <result column="class_name" property="className"/>
+        <result column="retry_times" property="tryTimes"/>
+        <result column="start_time" property="startTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , job_code, task_code, class_name, try_times, worker_code, start_time, create_time, update_time, app_name
+    </sql>
+
+</mapper>

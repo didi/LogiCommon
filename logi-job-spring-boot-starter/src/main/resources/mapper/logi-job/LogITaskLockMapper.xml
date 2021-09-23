@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didiglobal.logi.job.mapper.LogITaskLockMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.didiglobal.logi.job.common.po.LogITaskLockPO">
+        <id column="id" property="id"/>
+        <result column="task_code" property="taskCode"/>
+        <result column="woker_code" property="workerCode"/>
+        <result column="expire_time" property="expireTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="app_name" property="appName"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        task_code
+        , worker_code, expire_time, create_time, update_time, app_name
+    </sql>
+
+    <delete id="deleteByIds" parameterType="list">
+        delete from logi_task_lock
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

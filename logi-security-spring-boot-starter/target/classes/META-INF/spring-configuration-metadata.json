@@ -1,0 +1,48 @@
+{
+  "groups": [
+    {
+      "name": "logi.security",
+      "type": "com.didiglobal.logi.security.properties.LogiSecurityProper",
+      "sourceType": "com.didiglobal.logi.security.properties.LogiSecurityProper"
+    }
+  ],
+  "properties": [
+    {
+      "name": "logi.security.app-name",
+      "type": "java.lang.String",
+      "description": "应用名称",
+      "sourceType": "com.didiglobal.logi.security.properties.LogiSecurityProper"
+    },
+    {
+      "name": "logi.security.driver-class-name",
+      "type": "java.lang.String",
+      "description": "数据库信息",
+      "sourceType": "com.didiglobal.logi.security.properties.LogiSecurityProper"
+    },
+    {
+      "name": "logi.security.password",
+      "type": "java.lang.String",
+      "description": "数据库信息",
+      "sourceType": "com.didiglobal.logi.security.properties.LogiSecurityProper"
+    },
+    {
+      "name": "logi.security.resource-extend-bean-name",
+      "type": "java.lang.String",
+      "description": "用户需要实现resourceExtend接口，并在spring容器中的bean name",
+      "sourceType": "com.didiglobal.logi.security.properties.LogiSecurityProper"
+    },
+    {
+      "name": "logi.security.url",
+      "type": "java.lang.String",
+      "description": "数据库信息",
+      "sourceType": "com.didiglobal.logi.security.properties.LogiSecurityProper"
+    },
+    {
+      "name": "logi.security.username",
+      "type": "java.lang.String",
+      "description": "数据库信息",
+      "sourceType": "com.didiglobal.logi.security.properties.LogiSecurityProper"
+    }
+  ],
+  "hints": []
+}
