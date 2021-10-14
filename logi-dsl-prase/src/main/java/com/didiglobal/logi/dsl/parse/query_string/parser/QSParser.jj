@@ -1,0 +1,201 @@
+options {
+  STATIC=false;
+  JAVA_UNICODE_ESCAPE=true;
+  USER_CHAR_STREAM=true;
+}
+
+PARSER_BEGIN(QSParser)
+
+package com.didichuxing.datachannel.arius.dsl.common.query_string.parser;
+import QSNode;
+import java.io.StringReader;
+
+public class QSParser extends QSBaseParser {
+    public QSParser() {
+        this(new FastCharStream(new StringReader("")));
+    }
+
+    public QSNode parse(String queryString) throws ParseException {
+        ReInit(new FastCharStream(new StringReader(queryString)));
+        return super.parse(queryString);
+    }
+}
+
+PARSER_END(QSParser)
+
+/* ***************** */
+/* Token Definitions */
+/* ***************** */
+
+<*> TOKEN : {
+  <#_NUM_CHAR:   ["0"-"9"] >
+| <#_ESCAPED_CHAR: "\\" ~[] >
+| <#_TERM_START_CHAR: ( ~[ " ", "\t", "\n", "\r", "\u3000", "+", "-", "!", "(", ")", ":", "^",
+                           "[", "]", "\"", "{", "}", "~", "*", "?", "\\", "/" ]
+                       | <_ESCAPED_CHAR> ) >
+| <#_TERM_CHAR: ( <_TERM_START_CHAR> | <_ESCAPED_CHAR> | "-" | "+" ) >
+| <#_WHITESPACE: ( " " | "\t" | "\n" | "\r" | "\u3000") >
+| <#_QUOTED_CHAR: ( ~[ "\"", "\\" ] | <_ESCAPED_CHAR> ) >
+}
+
+<DEFAULT, Range> SKIP : {
+  < <_WHITESPACE>>
+}
+
+<DEFAULT> TOKEN : {
+  <AND1:       "AND" >
+| <AND2:       "and"  >
+| <AND3:       "&&"  >
+| <OR1:        "OR"  >
+| <OR2:        "or"  >
+| <OR3:        "||"  >
+| <NOT1:       "NOT" >
+| <NOT2:       "not" >
+| <NOT3:       "!" >
+| <PLUS:      "+" >
+| <MINUS:     "-" >
+| <BAREOPER:    ("+"|"-"|"!") <_WHITESPACE> >
+| <LPAREN:    "(" >
+| <RPAREN:    ")" >
+| <COLON:     ":" >
+| <STAR:      "*" >
+| <CARAT:     "^" > : Boost
+| <QUOTED:     "\"" (<_QUOTED_CHAR>)* "\"">
+| <TERM:      <_TERM_START_CHAR> (<_TERM_CHAR>)*  >
+| <FUZZY_SLOP:     "~" ((<_NUM_CHAR>)+ (( "." (<_NUM_CHAR>)+ )? (<_TERM_CHAR>)*) | (<_TERM_CHAR>)*)  >
+| <PREFIXTERM:  ("*") | ( <_TERM_START_CHAR> (<_TERM_CHAR>)* "*" ) >
+| <WILDTERM:  (<_TERM_START_CHAR> | [ "*", "?" ]) (<_TERM_CHAR> | ( [ "*", "?" ] ))* >
+| <REGEXPTERM: "/" (~[ "/" ] | "\\/" )* "/" >
+| <RANGEIN_START: "[" > : Range
+| <RANGEEX_START: "{" > : Range
+}
+
+<Boost> TOKEN : {
+<NUMBER:    (<_NUM_CHAR>)+ ( "." (<_NUM_CHAR>)+ )? > : DEFAULT
+}
+
+<Range> TOKEN : {
+<RANGE_TO: "TO">
+| <RANGEIN_END: "]"> : DEFAULT
+| <RANGEEX_END: "}"> : DEFAULT
+| <RANGE_QUOTED: "\"" (~["\""] | "\\\"")+ "\"">
+| <RANGE_GOOP: (~[ " ", "]", "}" ])+ >
+}
+
+
+// Query  ::= ( Clause )*
+// Clause ::= ["+", "-"] [<TERM> ":"] ( <TERM> | "(" Query ")" )
+// This makes sure that there is no garbage after the query string
+QSNode TopLevelQuery() :
+{
+  QSNode node;
+}
+{
+  node=Query() <EOF>
+  {
+    return node;
+  }
+}
+
+
+QSNode Query() :
+{
+  QSNodeBuilder builder = new QSNodeBuilder();
+}
+{
+  Modifiers(builder) Clause(builder)
+  (
+    Conjunction(builder) Modifiers(builder) Clause(builder)
+  )*
+
+  {
+    return builder.toNode();
+  }
+}
+
+// 解析一个等式    a:2
+void Clause(QSNodeBuilder builder) :
+{
+  Token fieldToken=null, boost=null;
+  QSNode node;
+}
+{
+  [
+    LOOKAHEAD(2)
+    (
+    fieldToken=<TERM> <COLON> { builder.addFieldEq(fieldToken); }
+    | fieldToken=<STAR> <COLON> { builder.addFieldEq(fieldToken); }
+    )
+  ]
+  (
+   Term(builder)
+   | <LPAREN> node=Query() <RPAREN> (<CARAT> boost=<NUMBER>)? { builder.addParen(node, boost); }
+  )
+}
+
+// 解析一个value
+void Term(QSNodeBuilder builder) : {
+  Token term, boost=null, fuzzySlop=null, goop1, goop2;
+  boolean startInc=false;
+  boolean endInc=false;
+}
+{
+  (
+     (
+       term=<TERM>
+       | term=<STAR>
+       | term=<PREFIXTERM>
+       | term=<WILDTERM>
+       | term=<REGEXPTERM>
+       | term=<NUMBER>
+       | term=<BAREOPER>
+     )
+     [ fuzzySlop=<FUZZY_SLOP> ]
+     [ <CARAT> boost=<NUMBER> [ fuzzySlop=<FUZZY_SLOP> ] ]
+     {
+       builder.addValue(term, fuzzySlop, boost);
+     }
+     | ( ( <RANGEIN_START> {startInc=true;} | <RANGEEX_START> )
+         ( goop1=<RANGE_GOOP>|goop1=<RANGE_QUOTED> )
+         [ <RANGE_TO> ]
+         ( goop2=<RANGE_GOOP>|goop2=<RANGE_QUOTED> )
+         ( <RANGEIN_END> {endInc=true;} | <RANGEEX_END>))
+       [ <CARAT> boost=<NUMBER> ]
+       {
+         builder.addRange(goop1, goop2, startInc, endInc);
+       }
+     | term=<QUOTED>
+       [ fuzzySlop=<FUZZY_SLOP> ]
+       [ <CARAT> boost=<NUMBER> ]
+       {
+         builder.addValue(term, fuzzySlop, boost);
+       }
+  )
+}
+
+void Conjunction(QSNodeBuilder builder) : {
+  Token conj;
+}
+{
+  [
+    conj=<AND1>     { builder.addAnd(conj); }
+    | conj=<AND2>   { builder.addAnd(conj); }
+    | conj=<AND3>   { builder.addAnd(conj); }
+    | conj=<OR1>    { builder.addOr(conj); }
+    | conj=<OR2>    { builder.addOr(conj); }
+    | conj=<OR3>    { builder.addOr(conj); }
+  ]
+}
+
+void Modifiers(QSNodeBuilder builder) : {
+  Token mods;
+}
+{
+  [
+     mods=<PLUS>    { builder.addPlus(mods); }
+     | mods=<MINUS> { builder.addMinus(mods); }
+     | mods=<NOT1>  { builder.addNot(mods); }
+     | mods=<NOT2>  { builder.addNot(mods); }
+     | mods=<NOT3>  { builder.addNot(mods); }
+  ]
+}

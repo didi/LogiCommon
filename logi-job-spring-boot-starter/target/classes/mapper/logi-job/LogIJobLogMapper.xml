@@ -38,7 +38,7 @@
         WHERE
         app_name = #{appName}
         <if test="taskId != null">and task_id = #{taskId}</if>
-        <if test="taskDesc != null">and task_desc like concat('%,', #{taskDesc},',%')</if>
+        <if test="taskDesc != null">and task_desc like concat('%', #{taskDesc},'%')</if>
         <if test="jobStatus != null">and status = #{jobStatus}</if>
         <if test="beginTime != null">and create_time &gt; #{beginTime}</if>
         <if test="endTime != null">and create_time &lt; #{endTime}</if>
@@ -53,7 +53,7 @@
         WHERE
         app_name = #{appName}
         <if test="taskId != null">and task_id = #{taskId}</if>
-        <if test="taskDesc != null">and task_desc like concat('%,', #{taskDesc},',%')</if>
+        <if test="taskDesc != null">and task_desc like concat('%', #{taskDesc},'%')</if>
         <if test="jobStatus != null">and status = #{jobStatus}</if>
         <if test="beginTime != null">and create_time &gt; #{beginTime}</if>
         <if test="endTime != null">and create_time &lt; #{endTime}</if>

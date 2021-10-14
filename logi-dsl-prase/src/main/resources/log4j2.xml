@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error" monitorInterval="60">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%msg%n"/>
+            <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+
+        <RollingFile name="SystemFile" fileName="log/system.log"
+                     filePattern="log/system-%i.log" append="false">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="100MB"/>
+            <DefaultRolloverStrategy max="2"/>
+        </RollingFile>
+        <RollingFile name="gatherErrorLogger" fileName="log/gatherErrorLogger.log"
+                     filePattern="log/gatherErrorLogger.log.%i" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %L - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="10MB"/>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="SystemFile"/>
+        </Root>
+        <logger name="gatherErrorLogger" additivity="false">
+            <level value="INFO"/>
+            <AppenderRef ref="gatherErrorLogger"/>
+        </logger>
+    </Loggers>
+
+</Configuration>

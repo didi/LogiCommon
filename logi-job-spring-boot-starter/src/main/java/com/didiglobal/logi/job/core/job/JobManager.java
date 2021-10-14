@@ -22,7 +22,7 @@ public interface JobManager {
     Future<Object> start(LogITask logITask);
 
     /**
-     * @return
+     * @return 当前运行任务大小
      */
     Integer runningJobSize();
 
@@ -35,18 +35,21 @@ public interface JobManager {
     boolean stopByJobCode(String jobCode);
 
     /**
-     * @param taskCode
-     * @return
+     * 通过任务编号停止任务
+     * @param taskCode 任务编号
+     * @return 是否成功
      */
     boolean stopByTaskCode(String taskCode);
 
     /**
-     * @return
+     * 停止全部
+     * @return 停止成功数量
      */
     int stopAll();
 
     /**
-     * @return
+     * 获取job信息
+     * @return job信息List
      */
     List<LogIJob> getJobs();
 }

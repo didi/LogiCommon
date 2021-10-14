@@ -8,12 +8,12 @@ import lombok.Data;
 /**
  * @author cjm
  *
- * 资源权限管理>按资源管理的列表信息
+ * 资源权限管理/按资源管理的列表信息
  *
  * MByR（ManageByResource）
  */
 @Data
-@ApiModel(description = "资源权限管理/按资源管理/列表信息")
+@ApiModel(description = "资源权限管理（按资源管理的列表信息）")
 public class MByRVO {
 
     /**

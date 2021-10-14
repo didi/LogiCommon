@@ -14,9 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 
 /**
- * @author qmoj
- * @version 1.0
- * @date 2021/1/20 13:10
+ * @author cjm
+ * 数据源、mybatis-plus配置
  */
 @Configuration("logiSecurityDataSourceConfig")
 @MapperScan("com.didiglobal.logi.security.dao.mapper")

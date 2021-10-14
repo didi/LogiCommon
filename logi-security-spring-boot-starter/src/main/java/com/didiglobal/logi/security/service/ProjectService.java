@@ -22,7 +22,9 @@ public interface ProjectService {
      * 创建项目
      *
      * @param saveDTO 项目信息
+     * @param request 请求信息
      * @throws LogiSecurityException 项目相关的错误信息
+     * @return 项目信息
      */
     ProjectVO createProject(ProjectSaveDTO saveDTO, HttpServletRequest request) throws LogiSecurityException;
 
@@ -47,7 +49,7 @@ public interface ProjectService {
      * 条件分页查询项目信息
      *
      * @param queryDTO 条件信息
-     * @return PagingData<ProjectVo>
+     * @return 项目分页信息
      */
     PagingData<ProjectVO> getProjectPage(ProjectQueryDTO queryDTO);
 
@@ -55,6 +57,7 @@ public interface ProjectService {
      * 删除项目
      *
      * @param projectId 项目id
+     * @param request 请求信息
      */
     void deleteProjectByProjectId(Integer projectId, HttpServletRequest request);
 
@@ -62,6 +65,7 @@ public interface ProjectService {
      * 更新项目信息
      *
      * @param saveDTO 项目信息
+     * @param request 请求信息
      * @throws LogiSecurityException 项目相关的错误信息
      */
     void updateProject(ProjectSaveDTO saveDTO, HttpServletRequest request) throws LogiSecurityException;
@@ -70,13 +74,14 @@ public interface ProjectService {
      * 更改项目运行状态，旧状态取反
      *
      * @param projectId 项目id
+     * @param request 请求信息
      */
     void changeProjectStatus(Integer projectId, HttpServletRequest request);
 
     /**
      * 获取所有项目简要信息
      *
-     * @return List<ProjectBriefVO> 项目简要信息list
+     * @return 项目简要信息list
      */
     List<ProjectBriefVO> getProjectBriefList();
 

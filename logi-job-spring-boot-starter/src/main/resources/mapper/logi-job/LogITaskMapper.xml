@@ -38,8 +38,8 @@
         WHERE
         app_name = #{appName}
         <if test="id != null">and id = #{id}</if>
-        <if test="taskDesc != null">and task_desc like concat('%,', #{taskDesc},',%')</if>
-        <if test="className != null">and class_name like concat('%,', #{className},',%')</if>
+        <if test="taskDesc != null">and task_desc like concat('%', #{taskDesc},'%')</if>
+        <if test="className != null">and class_name like concat('%', #{className},'%')</if>
         <if test="jobStatus != null">and status = #{jobStatus}</if>
         order by id desc
         limit #{start}, #{size}
@@ -52,8 +52,8 @@
         WHERE
         app_name = #{appName}
         <if test="id != null">and id = #{id}</if>
-        <if test="taskDesc != null">and task_desc like concat('%,', #{taskDesc},',%')</if>
-        <if test="className != null">and class_name like concat('%,', #{className},',%')</if>
+        <if test="taskDesc != null">and task_desc like concat('%', #{taskDesc},'%')</if>
+        <if test="className != null">and class_name like concat('%', #{className},'%')</if>
         <if test="jobStatus != null">and status = #{jobStatus}</if>
     </select>
 

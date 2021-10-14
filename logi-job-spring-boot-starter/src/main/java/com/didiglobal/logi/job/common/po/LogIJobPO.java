@@ -8,12 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
- * <p>
  * 正在执行的job信息.
- *
- * </p>
- *
+ **
  * @author ds
  * @since 2020-11-10
  */

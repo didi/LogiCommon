@@ -4,11 +4,7 @@ import com.didiglobal.logi.job.common.po.LogITaskPO;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 /**
  * <p>
@@ -18,6 +14,7 @@ import org.apache.ibatis.annotations.Update;
  * @author ds
  * @since 2020-11-10
  */
+@Mapper
 public interface LogITaskMapper {
 
     @Insert("INSERT INTO logi_task(task_code, task_name, task_desc, cron, class_name, params, retry_times,"

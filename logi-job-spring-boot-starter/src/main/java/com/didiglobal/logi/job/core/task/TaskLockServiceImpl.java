@@ -33,7 +33,9 @@ public class TaskLockServiceImpl implements TaskLockService {
     private LogIJobProperties logIJobProperties;
 
     /**
-     * constructor.
+     * constructor
+     * @param logITaskLockMapper mapper
+     * @param logIJobProperties 配置信息
      */
     @Autowired
     public TaskLockServiceImpl(LogITaskLockMapper logITaskLockMapper, LogIJobProperties logIJobProperties) {

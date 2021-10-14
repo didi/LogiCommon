@@ -5,8 +5,6 @@ import com.didiglobal.logi.job.common.po.LogIJobLogPO;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.didiglobal.logi.job.common.po.LogITaskPO;
-import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
 
 /**
@@ -17,6 +15,7 @@ import org.apache.ibatis.annotations.*;
  * @author ds
  * @since 2020-11-10
  */
+@Mapper
 public interface LogIJobLogMapper {
 
     @Insert("INSERT INTO logi_job_log(job_code, task_code, task_id, task_name, "

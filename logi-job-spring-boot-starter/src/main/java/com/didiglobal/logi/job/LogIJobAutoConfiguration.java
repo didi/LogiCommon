@@ -30,6 +30,8 @@ public class LogIJobAutoConfiguration {
 
     /**
      * start scheduler.
+     * @param applicationContext 应用容器
+     * @return Scheduler
      */
     @Bean
     @ConditionalOnMissingBean

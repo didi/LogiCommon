@@ -12,7 +12,7 @@ import java.util.List;
 public interface TaskLockService {
     /**
      * 尝试获取锁.
-     *
+     * @param taskCode 任务编号
      * @return true/false
      */
     Boolean tryAcquire(String taskCode);
@@ -29,7 +29,7 @@ public interface TaskLockService {
 
     /**
      * 尝试释放锁.
-     *
+     * @param taskCode 任务编号
      * @return true/false
      */
     Boolean tryRelease(String taskCode);

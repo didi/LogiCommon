@@ -22,7 +22,8 @@ public class JobExecutor {
     public ThreadPoolExecutor threadPoolExecutor;
 
     /**
-     * constructor.
+     * construct
+     * @param properties 配置信息
      */
     @Autowired
     public JobExecutor(LogIJobProperties properties) {

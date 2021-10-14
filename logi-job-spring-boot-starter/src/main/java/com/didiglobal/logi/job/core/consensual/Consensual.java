@@ -13,9 +13,8 @@ public interface Consensual {
 
     /**
      * 节点能否执行任务.
-     *
+     * @param logITask 任务
      * @return 是否能认领
-     * @Param logITask 任务
      */
     boolean canClaim(LogITask logITask);
 }

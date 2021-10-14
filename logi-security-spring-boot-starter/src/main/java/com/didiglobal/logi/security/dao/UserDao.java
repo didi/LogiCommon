@@ -49,7 +49,7 @@ public interface UserDao {
     /**
      * 会分别以账户名和实名去模糊查询，返回两者的并集
      * @param name 账户名或实名
-     * @return List<User> 用户简要信息list
+     * @return 用户简要信息list
      */
     List<UserBrief> selectBriefListByNameAndDescOrderByCreateTime(String name);
 

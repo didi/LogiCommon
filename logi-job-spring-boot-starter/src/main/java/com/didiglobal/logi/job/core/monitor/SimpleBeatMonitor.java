@@ -54,10 +54,10 @@ public class SimpleBeatMonitor implements BeatMonitor {
         public void run() {
             while (true) {
                 try {
-                    beatManager.beat();
-
                     // beat every INTERVAL seconds
                     ThreadUtil.sleep(INTERVAL, TimeUnit.SECONDS);
+
+                    beatManager.beat();
                 } catch (Exception e) {
                     logger.info("class=SimpleBeatMonitor||method=run||url=||msg=", e);
                 }

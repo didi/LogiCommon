@@ -13,6 +13,7 @@ import java.util.List;
  * @author ds
  * @since 2020-11-10
  */
+@Mapper
 public interface LogIWorkerMapper {
 
     @Insert("INSERT INTO logi_worker(worker_code, worker_name, ip, cpu, cpu_used, memory, memory_used, jvm_memory, "

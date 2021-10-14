@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class BeatManagerImpl implements BeatManager {
      *
      * @param jobManager       job manager
      * @param logIWorkerMapper worker mapper
+     * @param logIJobProperties job 配置信息
      */
     @Autowired
     public BeatManagerImpl(JobManager jobManager, LogIWorkerMapper logIWorkerMapper,
@@ -62,6 +64,9 @@ public class BeatManagerImpl implements BeatManager {
     private void cleanWorker() {
         long currentTime = System.currentTimeMillis();
         List<LogIWorkerPO> logIWorkerPOS = logIWorkerMapper.selectByAppName(logIJobProperties.getAppName());
+
+        if(CollectionUtils.isEmpty(logIWorkerPOS)){return;}
+
         for (LogIWorkerPO logIWorkerPO : logIWorkerPOS) {
             if (logIWorkerPO.getUpdateTime().getTime() + 2 * 24 * ONE_HOUR * 1000 < currentTime) {
                 logIWorkerMapper.deleteByCode(logIWorkerPO.getWorkerCode());

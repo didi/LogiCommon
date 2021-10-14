@@ -74,7 +74,15 @@ public class JobManagerImpl implements JobManager {
     private ConcurrentHashMap<LogIJob, Future> jobFutureMap = new ConcurrentHashMap<>();
 
     /**
-     * constructor.
+     * construct
+     * @param jobFactory job
+     * @param logIJobMapper mapper
+     * @param logIJobLogMapper mapper
+     * @param logITaskMapper mapper
+     * @param jobExecutor jobExecutor
+     * @param taskLockService service
+     * @param logITaskLockMapper mapper
+     * @param logIJobProperties 配置信息
      */
     @Autowired
     public JobManagerImpl(JobFactory jobFactory, LogIJobMapper logIJobMapper,
@@ -241,6 +249,9 @@ public class JobManagerImpl implements JobManager {
         public void run() {
             while (true) {
                 try {
+                    // 间隔一段时间执行一次
+                    ThreadUtil.sleep(JOB_FUTURE_CLEAN_INTERVAL, TimeUnit.SECONDS);
+
                     logger.info("class=JobFutureHandler||method=run||url=||msg=check running jobs at regular "
                             + "time {}", JOB_FUTURE_CLEAN_INTERVAL);
 
@@ -264,9 +275,6 @@ public class JobManagerImpl implements JobManager {
                             future.cancel(true);
                         }
                     }));
-
-                    // 间隔一段时间执行一次
-                    ThreadUtil.sleep(JOB_FUTURE_CLEAN_INTERVAL, TimeUnit.SECONDS);
                 } catch (Exception e) {
                     logger.error("class=JobFutureHandler||method=run||url=||msg=", e);
                 }
@@ -423,6 +431,9 @@ public class JobManagerImpl implements JobManager {
         public void run() {
             while (true) {
                 try {
+                    // 间隔一段时间执行一次
+                    ThreadUtil.sleep(JOB_INTERVAL, TimeUnit.SECONDS);
+
                     logger.info("class=LogCleanHandler||method=run||url=||msg=clean auv_job_log regular"
                             + " time {}", JOB_INTERVAL);
 
@@ -434,8 +445,6 @@ public class JobManagerImpl implements JobManager {
                     );
 
                     logger.info("class=LogCleanHandler||method=run||url=||msg=clean log count={}", count);
-                    // 间隔一段时间执行一次
-                    ThreadUtil.sleep(JOB_INTERVAL, TimeUnit.SECONDS);
                 } catch (Exception e) {
                     logger.error("class=LogCleanHandler||method=run||url=||msg=", e);
                 }

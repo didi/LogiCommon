@@ -10,8 +10,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id
-        , worker_code
+        id, worker_code
     </sql>
 
 </mapper>

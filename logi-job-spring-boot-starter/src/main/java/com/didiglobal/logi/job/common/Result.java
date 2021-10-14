@@ -51,9 +51,8 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param resultType resultType
+     * @param resultType 返回信息枚举
      * @return Result
      */
     public static Result build(ResultType resultType) {
@@ -64,10 +63,9 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param code taskCode
-     * @param msg  msg
+     * @param code 编号
+     * @param msg 消息
      * @return Result
      */
     public static Result build(int code, String msg) {
@@ -78,11 +76,11 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param code taskCode
-     * @param msg  msg
-     * @param data data
+     * @param code 返回编号
+     * @param msg 返回消息
+     * @param data 返回数据
+     * @param <T> 返回对象类型
      * @return Result
      */
     public static <T> Result<T> build(int code, String msg, T data) {
@@ -94,10 +92,10 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param succ succ
-     * @param data data
+     * @param succ 是否成功
+     * @param data 数据
+     * @param <T> 对象类型
      * @return Result
      */
     public static <T> Result<T> build(boolean succ, T data) {
@@ -114,9 +112,8 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
-     *
-     * @param succ succ
+
+     * @param succ 是否成功
      * @return Result
      */
     public static Result build(boolean succ) {
@@ -127,9 +124,8 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param msg msg
+     * @param msg 消息
      * @return Result
      */
     public static Result buildSucc(String msg) {
@@ -140,7 +136,6 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
      * @return Result
      */
@@ -152,9 +147,9 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param data data
+     * @param data 数据
+     * @param <T> 类型
      * @return Result
      */
     public static <T> Result<T> buildSucc(T data) {
@@ -166,10 +161,10 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param data data
-     * @param msg  msg
+     * @param data 数据
+     * @param msg 消息
+     * @param <T> 类型
      * @return Result
      */
     public static <T> Result<T> buildSucc(T data, String msg) {
@@ -181,9 +176,8 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param failMsg failMsg
+     * @param failMsg 错误信息
      * @return Result
      */
     public static Result buildFail(String failMsg) {
@@ -194,8 +188,6 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
-     *
      * @return Result
      */
     public static Result buildFail() {
@@ -206,9 +198,8 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param msg msg
+     * @param msg 消息
      * @return Result
      */
     public static Result buildParamIllegal(String msg) {
@@ -219,10 +210,10 @@ public class Result<T> extends BaseResult implements Serializable {
     }
 
     /**
-     * .
      *
-     * @param result result
-     * @return Result
+     * @param result 源数据
+     * @param <T> 目标类型
+     * @return 目标
      */
     public static <T> Result<T> buildFrom(Result result) {
         Result<T> resultT = new Result<>();

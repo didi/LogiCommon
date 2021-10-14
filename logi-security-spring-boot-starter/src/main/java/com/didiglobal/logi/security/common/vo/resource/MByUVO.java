@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author cjm
  *
- * 资源权限管理>按用户管理的列表信息
+ * 资源权限管理/按用户管理的列表信息
  *
  * MByU（ManagerByUser）
  */

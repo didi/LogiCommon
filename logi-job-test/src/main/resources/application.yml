@@ -1,16 +1,16 @@
 server:
   port: 8088
 
-
 spring:
   logi-job:
-    jdbc-url: jdbc:mysql://localhost:3306/es_manager_test?useUnicode=true&characterEncoding=utf8&jdbcCompliantTruncation=true&allowMultiQueries=true&useSSL=false
-    username: root
-    password: 123456
-    driver-class-name: org.mariadb.jdbc.Driver
+    jdbc-url: jdbc:mysql://10.179.222.237:4859/es_manager_test?useUnicode=true&characterEncoding=utf8&jdbcCompliantTruncation=true&allowMultiQueries=true&useSSL=false
+    username: didi_cCHn
+    password: KEA9kEPR4
+    driver-class-name: com.mysql.jdbc.Driver
     max-lifetime: 60000
     init-sql: true
     init-thread-num: 10
     max-thread-num: 20
-    log-expire: 3
-    app-name: logiTest
+    log-exipre: 3 # 日志保存天数，以天为单位
+    app_name: logi_job_test
+    claim-strategy: com.didiglobal.logi.job.core.consensual.RandomConsensual8088

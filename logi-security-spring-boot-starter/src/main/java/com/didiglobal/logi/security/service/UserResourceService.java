@@ -27,19 +27,19 @@ public interface UserResourceService {
     int getResourceCntByUserId(Integer userId, UserResourceQueryDTO queryDTO);
 
     /**
-     * 资源权限管理>按资源管理的列表信息
+     * 资源权限管理/按资源管理的列表信息
      * 获取分页列表信息
      * @param queryDTO 查询条件
-     * @return PagingData<ManageByResourceVo>
+     * @return 资源权限管理（按资源管理的列表信息）分页信息
      * @throws LogiSecurityException 异常信息
      */
     PagingData<MByRVO> getManageByResourcePage(MByRQueryDTO queryDTO) throws LogiSecurityException;
 
     /**
-     * 资源权限管理>按用户管理的列表信息
+     * 资源权限管理/按用户管理的列表信息
      * 获取分页列表信息
      * @param queryDTO 查询条件
-     * @return PagingData<ManageByUserVo>
+     * @return 资源权限管理（按用户管理的列表信息）分页信息
      */
     PagingData<MByUVO> getManageByUserPage(MByUQueryDTO queryDTO);
 
@@ -53,6 +53,7 @@ public interface UserResourceService {
     /**
      * 分配资源的权限给用户（某资源权限分配N个用户）
      * @param assignDTO 分配信息
+     * @param request 请求信息
      * @throws LogiSecurityException 异常信息
      */
     void assignResourcePermission(AssignToManyUserDTO assignDTO,
@@ -63,6 +64,7 @@ public interface UserResourceService {
      * 按资源管理下的批量分配用户：分配之前先删除N资源先前已分配的用户
      * 按用户管理下的批量分配资源：分配之前先删除N用户已拥有的资源权限
      * @param assignDTO 分配信息
+     * @param request 请求信息
      * @throws LogiSecurityException 异常信息
      */
     void batchAssignResourcePermission(BatchAssignDTO assignDTO,

@@ -4,20 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>logi-common</artifactId>
-        <groupId>com.didiglobal.logi</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>io.github.zqrferrari</groupId>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>logi-job-test</artifactId>
 
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
 
     <dependencies>
-        <!-- self -->
+        <!-- logi-job 依赖 -->
         <dependency>
-            <groupId>com.didiglobal.logi</groupId>
+            <groupId>io.github.zqrferrari</groupId>
             <artifactId>logi-job-spring-boot-starter</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>1.0.4</version>
         </dependency>
 
         <!-- spring -->
@@ -40,18 +43,43 @@
             <artifactId>jackson-annotations</artifactId>
         </dependency>
 
-        <!-- swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
+            <!--
+                排除自带的 models 老版本
+                因为 swagger.version 为2.9.0以上，如果实体的参数不设置example值，就会报错
+                所以把 swagger-models 的版本升级到 1.5.22以上
+             -->
+            <exclusions>
+                <exclusion>
+                    <groupId>io.swagger</groupId>
+                    <artifactId>swagger-models</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <!-- 使用1.5.22-->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-models</artifactId>
+            <version>1.5.22</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.41</version>
         </dependency>
 
     </dependencies>

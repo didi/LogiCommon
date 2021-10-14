@@ -8,14 +8,14 @@ import java.util.List;
 public interface JobLogManager {
 
     /**
-     * @param pageQueryDTO
-     * @return
+     * @param pageQueryDTO 分页查询条件
+     * @return 查询信息
      */
     List<LogIJobLogVO> pagineJobLogs(TaskLogPageQueryDTO pageQueryDTO);
 
     /**
-     * @param pageQueryDTO
-     * @return
+     * @param pageQueryDTO 分页查询条件
+     * @return 数量
      */
     int getJobLogsCount(TaskLogPageQueryDTO pageQueryDTO);
 }

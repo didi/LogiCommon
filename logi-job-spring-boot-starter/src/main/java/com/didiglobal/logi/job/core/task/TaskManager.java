@@ -23,7 +23,9 @@ public interface TaskManager {
     Result delete(String taskCode);
 
     /**
-     * 更新任务.
+     * 更新任务
+     * @param logITaskDTO 更新信息
+     * @return boolean
      */
     boolean update(LogITaskDTO logITaskDTO);
 
@@ -56,6 +58,7 @@ public interface TaskManager {
      *
      * @param taskCode    task taskCode
      * @param executeSubs 是否执行子任务
+     * @return Result
      */
     Result execute(String taskCode, Boolean executeSubs);
 
@@ -77,9 +80,9 @@ public interface TaskManager {
     /**
      * 更改某个任务的状态
      *
-     * @param taskCode
-     * @param status
-     * @return
+     * @param taskCode 任务编号
+     * @param status 状态
+     * @return 是否成功
      */
     Result<Boolean> updateTaskStatus(String taskCode, int status);
 
@@ -92,16 +95,16 @@ public interface TaskManager {
 
     /**
      * 获取所有任务个数
-     *
-     * @return
+     * @param queryDTO 查询条件
+     * @return 任务个数
      */
     int pagineTaskConut(TaskPageQueryDTO queryDTO);
 
     /**
      * 分页获取相关任务
      *
-     * @param taskPageQueryDTO
-     * @return
+     * @param taskPageQueryDTO 任务分页查询信息
+     * @return 任务List
      */
     List<LogITask> getPagineList(TaskPageQueryDTO taskPageQueryDTO);
 
@@ -109,6 +112,7 @@ public interface TaskManager {
      * 恢复任务 并释放锁.
      *
      * @param taskCode taskCode
+     * @param workerCode 任务编号
      * @return true/false
      */
     Result<Boolean> release(String taskCode, String workerCode);
@@ -116,8 +120,8 @@ public interface TaskManager {
     /**
      * 获取某个具体的任务
      *
-     * @param taskCode
-     * @return
+     * @param taskCode 任务编号
+     * @return 任务信息
      */
     LogITask getByCode(String taskCode);
 

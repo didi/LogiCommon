@@ -4,10 +4,7 @@ import com.didiglobal.logi.job.common.po.LogIJobPO;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * <p>
@@ -17,6 +14,7 @@ import org.apache.ibatis.annotations.Select;
  * @author ds
  * @since 2020-11-10
  */
+@Mapper
 public interface LogIJobMapper {
 
     @Delete("delete from logi_job where job_code=#{code}")

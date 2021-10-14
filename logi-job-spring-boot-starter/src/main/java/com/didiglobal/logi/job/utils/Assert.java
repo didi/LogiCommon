@@ -16,6 +16,8 @@ public class Assert {
 
     /**
      * isTrue.
+     * @param test 测试
+     * @param msg 消息
      */
     public static void isTrue(boolean test, String msg) {
         if (!test) {

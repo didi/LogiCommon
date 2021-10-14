@@ -12,7 +12,7 @@ public interface DeptDao {
 
     /**
      * 获取全部
-     * @return List<Dept>
+     * @return 部门信息List
      */
     List<Dept> selectAllAndAscOrderByLevel();
 

@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 /**
  * @author cjm
  *
- * 资源权限管理>按用户管理的列表查询条件
+ * 资源权限管理/按用户管理的列表查询条件
  *
  * MByU（ManagerByUser）
  */

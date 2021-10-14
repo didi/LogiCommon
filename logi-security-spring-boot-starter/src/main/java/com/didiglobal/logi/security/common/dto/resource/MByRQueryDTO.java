@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 /**
  * @author cjm
  *
- * 资源权限管理>按资源管理的列表查询条件
+ * 资源权限管理/按资源管理的列表查询条件
  *
  * MByR（ManageByResource）
  */
@@ -45,9 +45,9 @@ public class MByRQueryDTO extends PageParamDTO {
      */
     @ApiModelProperty(
             value =
-            "项目展示级别，则name表示项目名称、" +
-            "资源类别展示级别，则name表示资源类别名称、" +
-            "具体资源展示级别，则name表示具体资源名称）",
+                    "项目展示级别，则name表示项目名称、" +
+                            "资源类别展示级别，则name表示资源类别名称、" +
+                            "具体资源展示级别，则name表示具体资源名称）",
             dataType = "Integer", required = false
     )
     private String name;

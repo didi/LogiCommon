@@ -47,6 +47,23 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="mysqlStatLogger" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${log.path}/mysqlStat.log</File>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset> <!-- 设置字符集 -->
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${log.path}/mysqlStat.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxHistory>3</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!--// mybatis sql 日志打到 SQL_LOG-->
+    <logger name="com.didiglobal.logi.job.mapper" level="DEBUG" additivity="false">
+        <appender-ref ref="mysqlStatLogger" />
+    </logger>
+
     // auv job log
     // auv job包打到 LOGI_JOB_LOG
     <logger name="com.didiglobal.logi.job" level="INFO" additivity="false">
@@ -63,6 +80,11 @@
     <logger name="org" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="BUZ_LOG"/>
+    </logger>
+
+    <logger name="mysqlStatLogger" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="mysqlStatLogger"/>
     </logger>
 
     // 所有的日志都打到 STDOUT

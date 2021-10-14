@@ -22,8 +22,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class AuvDataSourceConfig {
 
     /**
-     * 配置数据源.
-     *
+     * 配置数据源
+     * @param logIJobProperties 数据源配置信息
      * @return 数据源
      */
     @Bean("auvDataSource")

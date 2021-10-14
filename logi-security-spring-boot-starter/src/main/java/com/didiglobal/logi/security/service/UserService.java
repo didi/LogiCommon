@@ -53,14 +53,14 @@ public interface UserService {
     /**
      * 根据部门id获取用户list（获取该部门下所有的用户，包括各种子部门）
      * @param deptId 部门id，如果为null，表示无部门用户
-     * @return List<UserBriefVO> 用户简要信息list
+     * @return 用户简要信息list
      */
     List<UserBriefVO> getUserBriefListByDeptId(Integer deptId);
 
     /**
      * 根据用户id和roleName获取角色list
      * @param userId 用户id
-     * @return List<AssignDataVo>
+     * @return 分配角色或者分配用户/列表信息
      * @throws LogiSecurityException 用户id不可为null
      */
     List<AssignInfoVO> getAssignDataByUserId(Integer userId) throws LogiSecurityException;
@@ -68,7 +68,7 @@ public interface UserService {
     /**
      * 根据角色id获取用户list
      * @param roleId 角色Id
-     * @return List<UserBriefVO> 用户简要信息list
+     * @return 用户简要信息list
      */
     List<UserBriefVO> getUserBriefListByRoleId(Integer roleId);
 
@@ -76,7 +76,7 @@ public interface UserService {
      * 会分别以账户名和实名去模糊查询，返回两者的并集
      * 创建项目，添加项目负责人的时候用到
      * @param name 账户名或实名
-     * @return List<UserBriefVO> 用户简要信息list
+     * @return 用户简要信息list
      */
     List<UserBriefVO> getUserBriefListByUsernameOrRealName(String name);
 
@@ -90,7 +90,7 @@ public interface UserService {
     /**
      * 会分别以账户名和实名去模糊查询，返回两者的并集
      * @param name 账户名或实名
-     * @return List<Integer> 用户IdList
+     * @return 用户IdList
      */
     List<Integer> getUserIdListByUsernameOrRealName(String name);
 

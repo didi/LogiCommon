@@ -60,7 +60,7 @@ public interface RoleDao {
     /**
      * 根据角色idList获取角色简要信息
      * @param roleIdList 角色idList
-     * @return List<RolePO>
+     * @return 角色简要信息List
      */
     List<RoleBrief> selectBriefListByRoleIdList(List<Integer> roleIdList);
 

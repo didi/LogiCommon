@@ -58,6 +58,8 @@ public class TaskManagerImpl implements TaskManager {
      * @param jobManager      jobManager
      * @param taskLockService taskLockService
      * @param logITaskMapper  logITaskMapper
+     * @param logIJobProperties 配置信息
+     * @param consensualFactory 一致协议工厂
      */
     public TaskManagerImpl(JobManager jobManager, ConsensualFactory consensualFactory,
                            TaskLockService taskLockService, LogITaskMapper logITaskMapper,
