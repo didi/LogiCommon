@@ -162,17 +162,23 @@ logi-log-log是基于slf4j封装的组件，为用户提供日志相关功能。
 #### 3.2.1 Trace功能
 Trace功能，是为了根据一个flag，把单个请求的日志关联起来。
 1. 入口设置flag
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/101.png" alt="101.png" style="zoom:50%;" />
+  <img src="https://github.com/didi/LogiCommon/blob/master/picture/101.png" alt="101.png" style="zoom:50%;" />
+
 2. Logger对象
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/100.png" alt="100.png" style="zoom:50%;" />
+  <img src="https://github.com/didi/LogiCommon/blob/master/picture/100.png" alt="100.png" style="zoom:50%;" />
+
 3. 打印日志
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/102.png" alt="102.png" style="zoom:50%;" />
+  <img src="https://github.com/didi/LogiCommon/blob/master/picture/102.png" alt="102.png" style="zoom:50%;" />
+
 4. 日志打印结果
-![103.png](https://github.com/didi/LogiCommon/blob/master/picture/103.png)
+  <img src="https://github.com/didi/LogiCommon/blob/master/picture/103.png" alt="103.png"/>
+
 5. 根据flag，查询单次请求相关日志
-![104.png](https://github.com/didi/LogiCommon/blob/master/picture/104.png)
-另，新建的线程里打印日志，是不会自动带上flag的，如果需要，可以将flag传入runnable对象。
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/105.png" alt="105.png" style="zoom:50%;" />
+
+  <img src="https://github.com/didi/LogiCommon/blob/master/picture/104.png" alt="104.png"/>
+
+  另，新建的线程里打印日志，是不会自动带上flag的，如果需要，可以将flag传入runnable对象。
+  <img src="https://github.com/didi/LogiCommon/blob/master/picture/105.png" alt="105.png" style="zoom:50%;" />
 #### 3.2.2 日志聚合
 1. 日志聚合
 
@@ -180,12 +186,13 @@ Trace功能，是为了根据一个flag，把单个请求的日志关联起来�
   <img src="https://github.com/didi/LogiCommon/blob/master/picture/106.png" alt="106.png" style="zoom: 50%;" />
 
 2. 日志采样
-  <img src="https://github.com/didi/LogiCommon/blob/master/picture/107.png" alt="107.png" style="zoom:50%;" />
+    <img src="https://github.com/didi/LogiCommon/blob/master/picture/107.png" alt="107.png" style="zoom:50%;" />
 
 3. 聚合结果
 
   count表示同一个key出现多少次
-  ![108.png](https://github.com/didi/LogiCommon/blob/master/picture/108.png)
+<img src="https://github.com/didi/LogiCommon/blob/master/picture/108.png" alt="108.png" />
+
 ### 3.3 logi-log-log4j2
 logi-log-log4j2，是基于log4j2 2.9.1封装的，支持日志发送到kafka，以及过滤重复日志功能。
 #### 3.3.1 日志发送到kafka
@@ -213,8 +220,11 @@ logi-log-log4j2，是基于log4j2 2.9.1封装的，支持日志发送到kafka，
 </Loggers>
 ```
 日志输出形如：
-![110.png](https://github.com/didi/LogiCommon/blob/master/picture/110.png)
+
+<img src="https://github.com/didi/LogiCommon/blob/master/picture/110.png" alt="110.png"/>
+
 也可以选择直接发送原始日志：
+
 ```xml
 <Kafka name="kafka" topic="${log.kafka.topic}" syncSend="false">
     <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %L - %msg%xEx%n"/>
