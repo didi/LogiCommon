@@ -39,7 +39,7 @@ public interface LogIJobLogMapper {
             + "task_name=#{taskName}, task_desc=#{taskDesc}, class_name=#{className}, try_times="
             + "#{tryTimes}, worker_code=#{workerCode}, worker_ip=#{workerIp}, start_time="
             + "#{startTime}, end_time=#{endTime}, status=#{status}, error=#{error}, result=#{result}, "
-            + " create_time=#{createTime}, update_time=#{updateTime}, app_name=#{appName} where job_code=#{jobCode}")
+            + "update_time=#{updateTime}, app_name=#{appName} where job_code=#{jobCode}")
     int updateByCode(LogIJobLogPO logIJobLogPO);
 
     @Delete("delete from logi_job_log where create_time<=#{createTime} and app_name=#{appName}")

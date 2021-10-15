@@ -221,6 +221,10 @@ public class TaskManagerImpl implements TaskManager {
             }
         }
 
+        if(TaskStatusEnum.RUNNING.getValue() == status){
+            execute(logITaskPO.getTaskCode(), false);
+        }
+
         logITaskPO.setStatus(status);
 
         return Result.buildSucc(logITaskMapper.updateByCode(logITaskPO) > 0);
