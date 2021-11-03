@@ -69,7 +69,6 @@ public class TaskManagerImpl implements TaskManager {
         this.taskLockService = taskLockService;
         this.logITaskMapper = logITaskMapper;
         this.logIJobProperties = logIJobProperties;
-
     }
 
     @Override

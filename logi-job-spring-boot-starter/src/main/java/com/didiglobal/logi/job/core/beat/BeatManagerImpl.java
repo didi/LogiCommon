@@ -5,6 +5,7 @@ import com.didiglobal.logi.job.common.domain.LogIWorker;
 import com.didiglobal.logi.job.common.po.LogIWorkerPO;
 import com.didiglobal.logi.job.core.WorkerSingleton;
 import com.didiglobal.logi.job.core.job.JobManager;
+import com.didiglobal.logi.job.core.monitor.SimpleBeatMonitor;
 import com.didiglobal.logi.job.mapper.LogIWorkerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +22,6 @@ public class BeatManagerImpl implements BeatManager {
     private JobManager jobManager;
     private LogIWorkerMapper logIWorkerMapper;
     private LogIJobProperties logIJobProperties;
-
-    private static final Long ONE_HOUR = 3600L;
 
     /**
      * constructor.
@@ -68,7 +67,7 @@ public class BeatManagerImpl implements BeatManager {
         if(CollectionUtils.isEmpty(logIWorkerPOS)){return;}
 
         for (LogIWorkerPO logIWorkerPO : logIWorkerPOS) {
-            if (logIWorkerPO.getUpdateTime().getTime() + 2 * 24 * ONE_HOUR * 1000 < currentTime) {
+            if (logIWorkerPO.getHeartbeat().getTime() + 3 * SimpleBeatMonitor.INTERVAL * 1000 < currentTime) {
                 logIWorkerMapper.deleteByCode(logIWorkerPO.getWorkerCode());
             }
         }

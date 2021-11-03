@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class TaskBeanPostProcessor implements BeanPostProcessor {
 
@@ -40,34 +42,51 @@ public class TaskBeanPostProcessor implements BeanPostProcessor {
     @Autowired
     private LogIJobProperties logIJobProperties;
 
+    @PostConstruct
+    public void init(){
+        logger.info("class=TaskBeanPostProcessor||method=init");
+    }
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        Class<?> beanClass = bean.getClass();
-        // add job to jobFactory
-        if (bean instanceof Job) {
-            jobFactory.addJob(beanClass.getCanonicalName(), (Job) bean);
-        } else {
-            return bean;
+        try {
+            logger.info("class=TaskBeanPostProcessor||method=postProcessAfterInitialization||beanName={}||canonicaName={}",
+                    beanName, bean.getClass().getCanonicalName());
+
+            Class<?> beanClass = bean.getClass();
+            // add job to jobFactory
+            if (bean instanceof Job) {
+                jobFactory.addJob(beanClass.getCanonicalName(), (Job) bean);
+
+                logger.info("class=TaskBeanPostProcessor||method=postProcessAfterInitialization||beanName={}||canonicaName={}||msg job",
+                        beanName, beanClass.getCanonicalName());
+            } else {
+                return bean;
+            }
+
+            // check and register to db
+
+            Task taskAnnotation = beanClass.getAnnotation(Task.class);
+            if (taskAnnotation == null || !taskAnnotation.autoRegister()) {
+                return bean;
+            }
+            // check
+            if (!check(taskAnnotation)) {
+                logger.error("class=TaskBeanPostProcessor||method=blacklist||url=||msg=invalid schedule {}",
+                        taskAnnotation.toString());
+            }
+            // not exists register
+            LogITaskPO task = getAuvTask(beanClass, taskAnnotation);
+            task.setTaskCode(IdWorker.getIdStr());
+            if (!contains(task)) {
+                task.setStatus(TaskStatusEnum.RUNNING.getValue());
+                logITaskMapper.insert(task);
+            }
+        }catch (Exception e){
+            logger.error("class=TaskBeanPostProcessor||method=postProcessAfterInitialization||beanName={}||msg=exception",
+                    beanName, e);
         }
 
-        // check and register to db
-
-        Task taskAnnotation = beanClass.getAnnotation(Task.class);
-        if (taskAnnotation == null || !taskAnnotation.autoRegister()) {
-            return bean;
-        }
-        // check
-        if (!check(taskAnnotation)) {
-            logger.error("class=TaskBeanPostProcessor||method=blacklist||url=||msg=invalid schedule {}",
-                    taskAnnotation.toString());
-        }
-        // not exists register
-        LogITaskPO task = getAuvTask(beanClass, taskAnnotation);
-        task.setTaskCode(IdWorker.getIdStr());
-        if (!contains(task)) {
-            task.setStatus(TaskStatusEnum.RUNNING.getValue());
-            logITaskMapper.insert(task);
-        }
         return bean;
     }
 

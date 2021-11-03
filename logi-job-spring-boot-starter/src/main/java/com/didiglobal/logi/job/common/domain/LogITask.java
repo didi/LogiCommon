@@ -17,7 +17,7 @@ public class LogITask {
     private String taskDesc;
     private String cron;
     private String className;
-    /*
+    /**
      * 执行参数 map 形式{key1:value1,key2:value2}
      */
     private String params;

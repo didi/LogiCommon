@@ -6,19 +6,14 @@ import com.didiglobal.logi.job.common.domain.LogIJob;
 import com.didiglobal.logi.job.common.domain.LogITask;
 import com.didiglobal.logi.job.common.enums.JobStatusEnum;
 import com.didiglobal.logi.job.common.enums.TaskWorkerStatusEnum;
-import com.didiglobal.logi.job.common.po.LogIJobLogPO;
-import com.didiglobal.logi.job.common.po.LogIJobPO;
-import com.didiglobal.logi.job.common.po.LogITaskLockPO;
-import com.didiglobal.logi.job.common.po.LogITaskPO;
+import com.didiglobal.logi.job.common.po.*;
 import com.didiglobal.logi.job.core.WorkerSingleton;
+import com.didiglobal.logi.job.core.job.JobContext;
 import com.didiglobal.logi.job.core.job.JobExecutor;
 import com.didiglobal.logi.job.core.job.JobFactory;
 import com.didiglobal.logi.job.core.job.JobManager;
 import com.didiglobal.logi.job.core.task.TaskLockService;
-import com.didiglobal.logi.job.mapper.LogIJobLogMapper;
-import com.didiglobal.logi.job.mapper.LogIJobMapper;
-import com.didiglobal.logi.job.mapper.LogITaskLockMapper;
-import com.didiglobal.logi.job.mapper.LogITaskMapper;
+import com.didiglobal.logi.job.mapper.*;
 import com.didiglobal.logi.job.utils.BeanUtil;
 import com.didiglobal.logi.job.utils.ThreadUtil;
 import org.slf4j.Logger;
@@ -66,6 +61,7 @@ public class JobManagerImpl implements JobManager {
     private LogIJobMapper logIJobMapper;
     private LogIJobLogMapper logIJobLogMapper;
     private LogITaskMapper logITaskMapper;
+    private LogIWorkerMapper logIWorkerMapper;
     private JobExecutor jobExecutor;
     private TaskLockService taskLockService;
     private LogITaskLockMapper logITaskLockMapper;
@@ -79,20 +75,25 @@ public class JobManagerImpl implements JobManager {
      * @param logIJobMapper mapper
      * @param logIJobLogMapper mapper
      * @param logITaskMapper mapper
+     * @param logIWorkerMapper logIWorkerMapper
      * @param jobExecutor jobExecutor
      * @param taskLockService service
      * @param logITaskLockMapper mapper
      * @param logIJobProperties 配置信息
      */
     @Autowired
-    public JobManagerImpl(JobFactory jobFactory, LogIJobMapper logIJobMapper,
-                          LogIJobLogMapper logIJobLogMapper, LogITaskMapper logITaskMapper,
+    public JobManagerImpl(JobFactory jobFactory,
+                          LogIJobMapper logIJobMapper,
+                          LogIJobLogMapper logIJobLogMapper,
+                          LogITaskMapper logITaskMapper,
+                          LogIWorkerMapper logIWorkerMapper,
                           JobExecutor jobExecutor, TaskLockService taskLockService,
                           LogITaskLockMapper logITaskLockMapper, LogIJobProperties logIJobProperties) {
         this.jobFactory = jobFactory;
         this.logIJobMapper = logIJobMapper;
         this.logIJobLogMapper = logIJobLogMapper;
         this.logITaskMapper = logITaskMapper;
+        this.logIWorkerMapper = logIWorkerMapper;
         this.jobExecutor = jobExecutor;
         this.taskLockService = taskLockService;
         this.logITaskLockMapper = logITaskLockMapper;
@@ -111,10 +112,15 @@ public class JobManagerImpl implements JobManager {
     public Future<Object> start(LogITask logITask) {
         // 添加job信息
         LogIJob logIJob = jobFactory.newJob(logITask);
+        if(null == logIJob){
+            logger.error("class=JobHandler||method=start||classname={}||msg=logIJob is null", logITask.getClassName());
+            return null;
+        }
+
         LogIJobPO job = logIJob.getAuvJob();
         logIJobMapper.insert(job);
 
-        Future jobFuture = jobExecutor.submit(new JobHandler(logIJob));
+        Future jobFuture = jobExecutor.submit(new JobHandler(logIJob, logITask));
         jobFutureMap.put(logIJob, jobFuture);
 
         // 增加auvJobLog
@@ -182,15 +188,18 @@ public class JobManagerImpl implements JobManager {
 
         private LogIJob logIJob;
 
-        public JobHandler(LogIJob logIJob) {
-            this.logIJob = logIJob;
+        private LogITask logITask;
+
+        public JobHandler(LogIJob logIJob, LogITask logITask) {
+            this.logIJob  = logIJob;
+            this.logITask = logITask;
         }
 
         @Override
         public Object call() {
             TaskResult object = null;
 
-            logger.info("class=JobHandler||method=call||url=||msg=start job {} with classname {}",
+            logger.info("class=JobHandler||method=call||msg=start job {} with classname {}",
                     logIJob.getJobCode(), logIJob.getClassName());
 
             try {
@@ -203,7 +212,18 @@ public class JobManagerImpl implements JobManager {
                 LogIJobLogPO logIJobLogPO = logIJob.getAuvJobLog();
                 logIJobLogMapper.updateByCode(logIJobLogPO);
 
-                object = logIJob.getJob().execute(null);
+                List<LogIWorkerPO>  logIWorkerPOS = logIWorkerMapper.selectByAppName(logIJobProperties.getAppName());
+                List<String>        workCodes     = new ArrayList<>();
+
+                if(CollectionUtils.isEmpty(logIWorkerPOS)){
+                    workCodes.add(logIJob.getWorkerIp());
+                }else {
+                    workCodes.addAll(logIWorkerPOS.stream().map(LogIWorkerPO::getWorkerCode).collect(Collectors.toList()));
+                }
+
+                JobContext jobContext = new JobContext(logITask.getParams(), workCodes, logIJob.getWorkerCode());
+
+                object = logIJob.getJob().execute(jobContext);
 
                 logIJob.setResult(object);
                 logIJob.setEndTime(new Timestamp(System.currentTimeMillis()));
@@ -211,15 +231,16 @@ public class JobManagerImpl implements JobManager {
                 // 记录任务被打断 进程关闭/线程关闭
                 logIJob.setStatus(JobStatusEnum.CANCELED.getValue());
                 logIJob.setResult(new TaskResult(FAIL_CODE, "task job be canceld!"));
+                String error = printStackTraceAsString(e);
                 logIJob.setError(printStackTraceAsString(e));
-                logger.error("class=JobHandler||method=call||url=||msg={}", e);
+                logger.error("class=JobHandler||method=call||classname={}||msg={}", logIJob.getClassName(), error);
             } catch (Exception e) {
                 // 记录任务异常信息
                 logIJob.setStatus(JobStatusEnum.FAILED.getValue());
                 logIJob.setResult(new TaskResult(FAIL_CODE, "task job has exception when running!" + e));
                 String error = printStackTraceAsString(e);
                 logIJob.setError(printStackTraceAsString(e));
-                logger.error("class=JobHandler||method=call||url=||msg={}", error);
+                logger.error("class=JobHandler||method=call||classname=||msg={}", logIJob.getClassName(), error);
             } finally {
 
                 //执行完成，记录日志

@@ -37,4 +37,7 @@ public interface LogIWorkerMapper {
     @Select("select worker_code, worker_name, ip, cpu, cpu_used, memory, memory_used, jvm_memory,"
             + "jvm_memory_used, job_num, heartbeat, app_name, update_time from logi_worker where app_name=#{appName}")
     List<LogIWorkerPO> selectByAppName(@Param("appName") String appName);
+
+    @Select("select count(1) from logi_worker where app_name=#{appName}")
+    int countByAppName(@Param("appName") String appName);
 }

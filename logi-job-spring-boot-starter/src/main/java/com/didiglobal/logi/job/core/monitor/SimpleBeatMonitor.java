@@ -23,6 +23,8 @@ public class SimpleBeatMonitor implements BeatMonitor {
 
     private Thread monitorThread;
 
+    public static final long INTERVAL = 10L;
+
     @Autowired
     public SimpleBeatMonitor(BeatManager beatManager) {
         this.beatManager = beatManager;
@@ -30,6 +32,8 @@ public class SimpleBeatMonitor implements BeatMonitor {
 
     @Override
     public void maintain() {
+        beatManager.beat();
+
         monitorThread = new Thread(new BeatMonitorThread(), "BeatMonitorThread");
         monitorThread.start();
     }
@@ -48,8 +52,6 @@ public class SimpleBeatMonitor implements BeatMonitor {
     }
 
     class BeatMonitorThread implements Runnable {
-        private static final long INTERVAL = 30L;
-
         @Override
         public void run() {
             while (true) {

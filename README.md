@@ -39,47 +39,6 @@ logi.security.driver-class-name=com.mysql.jdbc.Driver
 - resource-extend-bean-name：resourceExtend的实现类在spring容器bean的名称，logi-security 中资源权限管理模块，需要获取具体资源的信息，所以用户需实现 ResourceExtend 接口并指定实现类在spring容器中bean的名称；
 #### 1.3.3 需要实现接口
 用户可选的实现 ResourceExtend 接口，如果不实现，则资源权限管理模块的功能不能完整使用。接口详情见代码
-```java
-package com.didiglobal.logi.security.extend;
-
-import com.didiglobal.logi.security.common.PagingData;
-import com.didiglobal.logi.security.common.dto.resource.ResourceDTO;
-
-import java.util.List;
-
-/**
- * 资源扩展接口
- */
-public interface ResourceExtend {
-
-    /**
-     * 获取资源信息List，资源id指的是该资源所在服务对该资源的标识
-     * @param projectId 项目id（可为null）
-     * @param resourceTypeId 资源类型id（可为null，不为null则projectId必不为null）
-     * @param resourceName 资源名称（可为null，模糊查询条件）
-     * @param page 当前页（分页条件）
-     * @param size 页大小（分页条件）
-     * @return 资源信息List
-     */
-    PagingData<ResourceDTO> getResourcePage(Integer projectId, Integer resourceTypeId, String resourceName, int page, int size);
-
-    /**
-     * 获取资源信息List，资源id指的是该资源所在服务对该资源的标识
-     * @param projectId 项目id（可为null）
-     * @param resourceTypeId 资源类型id（可为null，不为null则projectId必不为null）
-     * @return 资源信息List
-     */
-    List<ResourceDTO> getResourceList(Integer projectId, Integer resourceTypeId);
-
-    /**
-     * 获取具体资源个数，资源id指的是该资源所在服务对该资源的标识
-     * @param projectId 项目id（可为null）
-     * @param resourceTypeId 资源类型id（可为null，不为null则projectId必不为null）
-     * @return 资源信息List
-     */
-    int getResourceCnt(Integer projectId, Integer resourceTypeId);
-}
-```
 #### 1.3.4 导入数据
 logi-security相关界面并没提供【角色权限元数据、资源类别数据、部门信息数据、操作日志相关（操作页面、操作对象、对象分类）】的创建功能，logi-security提供了数据导入的接口。
 建议全部都导入，简单的数据也行。
@@ -97,7 +56,7 @@ logi-security相关界面并没提供【角色权限元数据、资源类别数�
 <dependency>
     <groupId>io.github.zqrferrari</groupId>
     <artifactId>logi-job-spring-boot-starter</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.10</version>
 </dependency>
 ```
 #### 2.3.2 配置信息
@@ -162,42 +121,35 @@ logi-log-log是基于slf4j封装的组件，为用户提供日志相关功能。
 #### 3.2.1 Trace功能
 Trace功能，是为了根据一个flag，把单个请求的日志关联起来。
 1. 入口设置flag
-  <img src="https://github.com/didi/LogiCommon/blob/master/picture/101.png" alt="101.png" style="zoom:50%;" />
-
+<img src="picture/101.png" alt="101.png" style="zoom:50%;" />
 2. Logger对象
-  <img src="https://github.com/didi/LogiCommon/blob/master/picture/100.png" alt="100.png" style="zoom:50%;" />
-
+<img src="picture/100.png" alt="100.png" style="zoom:50%;" />
 3. 打印日志
-  <img src="https://github.com/didi/LogiCommon/blob/master/picture/102.png" alt="102.png" style="zoom:50%;" />
-
+<img src="picture/102.png" alt="102.png" style="zoom:50%;" />
 4. 日志打印结果
-  <img src="https://github.com/didi/LogiCommon/blob/master/picture/103.png" alt="103.png"/>
-
+![103.png](picture/103.png)
 5. 根据flag，查询单次请求相关日志
-
-  <img src="https://github.com/didi/LogiCommon/blob/master/picture/104.png" alt="104.png"/>
-
-  另，新建的线程里打印日志，是不会自动带上flag的，如果需要，可以将flag传入runnable对象。
-  <img src="https://github.com/didi/LogiCommon/blob/master/picture/105.png" alt="105.png" style="zoom:50%;" />
+![104.png](picture/104.png)
+另，新建的线程里打印日志，是不会自动带上flag的，如果需要，可以将flag传入runnable对象。
+<img src="picture/105.png" alt="105.png" style="zoom:50%;" />
 #### 3.2.2 日志聚合
 1. 日志聚合
 
   是为了防止频繁打印日志，影响应用的运行，特别是在异常场景下，每条数据都会触发异常。聚合是通过key来实现聚合的，可以自定义key来实现多种聚合。
-  <img src="https://github.com/didi/LogiCommon/blob/master/picture/106.png" alt="106.png" style="zoom: 50%;" />
+  <img src="picture/106.png" alt="106.png" style="zoom: 50%;" />
 
 2. 日志采样
-    <img src="https://github.com/didi/LogiCommon/blob/master/picture/107.png" alt="107.png" style="zoom:50%;" />
+    <img src="picture/107.png" alt="107.png" style="zoom:50%;" />
 
 3. 聚合结果
 
   count表示同一个key出现多少次
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/108.png" alt="108.png" />
-
+  ![108.png](picture/108.png)
 ### 3.3 logi-log-log4j2
 logi-log-log4j2，是基于log4j2 2.9.1封装的，支持日志发送到kafka，以及过滤重复日志功能。
 #### 3.3.1 日志发送到kafka
 配置kafka appender和layout
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/109.png" alt="109.png" style="zoom:50%;" />
+<img src="picture/109.png" alt="109.png" style="zoom:50%;" />
 配置appender
 
 ```xml
@@ -220,11 +172,8 @@ logi-log-log4j2，是基于log4j2 2.9.1封装的，支持日志发送到kafka，
 </Loggers>
 ```
 日志输出形如：
-
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/110.png" alt="110.png"/>
-
+![110.png](picture/110.png)
 也可以选择直接发送原始日志：
-
 ```xml
 <Kafka name="kafka" topic="${log.kafka.topic}" syncSend="false">
     <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %L - %msg%xEx%n"/>
@@ -235,13 +184,13 @@ logi-log-log4j2，是基于log4j2 2.9.1封装的，支持日志发送到kafka，
 ```
 #### 3.3.2 过滤重复日志
 配置appender即可
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/111.png" alt="111.png" style="zoom:50%;" />
+<img src="picture/111.png" alt="111.png" style="zoom:50%;" />
 打印日志
 
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/112.png" alt="112.png" style="zoom:40%;" />
+<img src="picture/112.png" alt="112.png" style="zoom:40%;" />
 
 日志输出如，count代表1分钟内，同样的日志出现几次
-<img src="https://github.com/didi/LogiCommon/blob/master/picture/113.png" alt="113.png" style="zoom:50%;" />
+<img src="picture/113.png" alt="113.png" style="zoom:50%;" />
 
 ## 4.logi-metrices
 Arius内部指标采集和计算的工具包。
@@ -263,3 +212,22 @@ Arius内部指标采集和计算的工具包。
     <version>1.0.4</version>
 </dependency>
 ```
+## 6.logi-elasticsearch-client
+### 6.1 添加Maven
+```xml
+<dependency>
+    <groupId>io.github.zqrferrari</groupId>
+    <artifactId>logi-elasticsearch-client</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+## 7.logi-elasticsearch-sql
+### 7.1 添加Maven
+```xml
+<dependency>
+    <groupId>io.github.zqrferrari</groupId>
+    <artifactId>logi-elasticsearch-sql</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+

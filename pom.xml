@@ -17,6 +17,8 @@
         <module>logi-log</module>
         <module>logi-dsl-prase</module>
         <module>logi-metrices</module>
+        <module>logi-elasticsearch-client</module>
+        <module>logi-elasticsearch-sql</module>
     </modules>
 
     <description>提供公共maven依赖</description>
@@ -71,7 +73,7 @@
             <dependency>
                 <groupId>io.github.zqrferrari</groupId>
                 <artifactId>logi-job-spring-boot-starter</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.10</version>
             </dependency>
 
             <!-- =====spring boot parent====== -->
