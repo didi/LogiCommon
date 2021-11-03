@@ -1,6 +1,0 @@
-build:
-  java:
-    version: 1.8
-    ant: 1.9.7
-    gradle: 2.14
-    maven: 3.3.3
